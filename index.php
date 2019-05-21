@@ -1,4 +1,6 @@
 <?php
+
+
 $user='zoguti';
 $password='Kyosuke';
 
@@ -9,6 +11,9 @@ $dsn="mysql:host={$host};dbname={$dbName};charset=utf8";
 
 
 $eMsg="";
+if(!$eMsg){
+  echo "<div id='eMsg'>".$eMsg."</div>";
+}
 
 require_once 'h.php';
 
@@ -90,40 +95,55 @@ require_once 'h.php';
 
 
  ?>
+ <!DOCTYPE html>
+ <html>
+   <head>
+     <meta charset="utf-8">
+     <title>家計簿</title>
 
-<!DOCTYPE html>
-<html>
-  <head>
-    <meta charset="utf-8">
-    <title>家計簿</title>
-    <link rel="stylesheet" href="/css/index.css">
-  </head>
-  <body>
+     <link rel="stylesheet" href="../css/index.css" type="test/css">
+   </head>
+   <body>
+     <?php
+     echo "<div id='eMsg'>".$eMsg."</div>";
 
-
-    <?php
-      if($eMsg){
-        echo "<div id='eMsg'>".$eMsg."</div>";
-      }
-     ?>
-    <form action="index.php" method="post">
+      ?>
       日付は****/**/**の形式で入力してください<br>
-      日付:<input type="date" name="date" placeholder="2000/01/01"><br>
-      目的:<input type="text" name="mokuteki"><br>
-      値段:<input type="text" name="nedan">
-      <label><input type="radio" name="type" value="収入" checked>収入</label>
-      <label><input type="radio" name="type" value="支出">支出</label><br>
+     <div id="form-1">
+     <form action="index.php" method="post">
 
-      <input type="submit" name="submit" value="入力">
-    </form >
-    削除する場合履歴を表示させ,idを入力してください<br>
-    履歴:
-    <form action="index.php" method="post">
-      <input type="submit" name="rireki" value="履歴">
-      <input type="submit" name="datesort" value="日付順">
-      <input type="submit" name="nitizi" value="月次集計">
-    </form>
+       日付:<input type="date" name="date" placeholder="2000/01/01"><br>
+       目的:<input type="text" name="mokuteki"><br>
+       値段:<input type="text" name="nedan">
+       <label><input type="radio" name="type" value="収入" checked>収入</label>
+       <label><input type="radio" name="type" value="支出">支出</label><br>
+
+       <input type="submit" name="submit" value="入力">
+     </form >
+   </div>
+     削除する場合履歴を表示させ,idを入力してください<br>
+     複数表示する際はボタンの名前を入力してください。
+
+     <h3>履歴<h3>
+
+
+     <form action="index.php" method="post">
+       <input class="button" type="submit" name="rireki" value="履歴">
+       <input class="button" type="submit" name="datesort" value="日付順">
+       <input class="button" type="submit" name="nitizi" value="月次集計">
+       <input class="button" type="submit" name="nenzi" value="年次集計">
+       複数表示<input type="text" name="rock">
+     </form>
+
+
+   </body>
+ </html>
+
+
+
+
     <?php
+
     if(isset($_POST['rireki'])) {
       rireki();
     }
@@ -134,19 +154,15 @@ require_once 'h.php';
       nitizi();
 
     }
+    if(isset($_POST['nenzi'])){
+      nenzi();
+    }
+
     if(isset($_POST['delete'])){
       delete();
     }
      ?>
-
-
-
-
-
-
      <br>
      <br>
-     加えたい機能:先月よりも使いすぎた場合の注意
-
   </body>
 </html>
