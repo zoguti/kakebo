@@ -215,7 +215,7 @@ function nitizi(){//年、月でまとめる
       $datesum=array_merge($datesum,array($key=>0));//日付をキーに
     }
     foreach($array as $key){
-    
+
       foreach($result as $row){
         if($key==$row['date']){//日付一致
           if($row['type']=="収入"){
@@ -247,6 +247,105 @@ function nitizi(){//年、月でまとめる
     exit();
   }
 }
+
+function nenzi(){//年、月でまとめる
+  $user='zoguti';
+  $password='Kyosuke';
+
+  $dbName='sample';
+
+  $host='localhost:8889';
+  $dsn="mysql:host={$host};dbname={$dbName};charset=utf8";
+
+  try{
+
+    $pdo=new PDO($dsn,$user,$password);
+
+    $pdo->setAttribute(PDO::ATTR_EMULATE_PREPARES,false);
+    $pdo->setAttribute(PDO::ATTR_ERRMODE,PDO::ERRMODE_EXCEPTION);
+
+    $sql="SELECT * FROM kakei";
+    $stm=$pdo->prepare($sql);
+
+    $stm->execute();
+
+    $result=$stm->fetchAll(PDO::FETCH_ASSOC);
+
+    echo "<table>";
+    echo "<thead><tr>";
+
+    echo "<th>","年","</th>";
+
+
+    echo "<th>","合計","</th>";
+
+    echo "<tr></thead>";
+    echo "<tbody>";
+    foreach ($result as $key => $value) {
+      $sort[$key]=$value['date'];//$resultと同じ連想多重配列
+
+    }
+    //日付順に並べる
+    array_multisort($sort,SORT_ASC,$result);
+
+    foreach($result as $key=>$value){
+      $str = $value['date'];//文字列
+      $cut = 6;//カットしたい文字数
+      $replace = substr( $str , 0 , strlen($str)-$cut );//0000の形
+      $result[$key]['date']=$replace;//代入
+    }
+
+
+    $array=[];//日付を入れる
+    foreach($result as $key =>$value ){
+      array_push($array,$value['date']);
+
+    }
+    $array=array_unique($array);//重複を避ける
+
+    $datesum=array();
+    foreach($array as $key){
+
+      $datesum[$key]=0;
+    }
+
+
+
+    foreach($array as $key){
+
+
+      foreach($result as $row){
+
+        if($key==$row['date']){//日付一致
+          if($row['type']=="収入"){
+            $datesum[$key]+=$row['nedan'];
+          }else{
+            $datesum[$key]-=$row['nedan'];
+          }
+        }
+      }
+    }
+    //表示
+    foreach($array as $row){
+      echo "<tr>";
+      echo "<td>",$row,"</td>";
+
+
+      echo "<td>",$datesum[$row],"</td>";
+      echo "</tr>";
+    }
+    echo "</tbody>";
+    echo "</table>";
+
+
+
+  }catch(Exception $e){
+    echo '<span class=error>エラーがありました。</span><br>';
+    //echo $e->getMessage();
+    exit();
+  }
+}
+
 
 
 
