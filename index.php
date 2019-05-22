@@ -122,7 +122,7 @@ require_once 'h.php';
      </form >
    </div>
      削除する場合履歴を表示させ,idを入力してください<br>
-     複数表示する際はボタンの名前を入力してください。
+
 
      <h3>履歴<h3>
 
@@ -132,7 +132,7 @@ require_once 'h.php';
        <input class="button" type="submit" name="datesort" value="日付順">
        <input class="button" type="submit" name="nitizi" value="月次集計">
        <input class="button" type="submit" name="nenzi" value="年次集計">
-       複数表示<input type="text" name="rock">
+       
      </form>
 
 
@@ -162,6 +162,7 @@ require_once 'h.php';
       delete();
     }
      ?>
+
      <br>
      <br>
   </body>
